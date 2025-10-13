@@ -12,8 +12,8 @@ test_surface = pygame.image.load('background.png').convert()
 test_surface = pygame.transform.scale(test_surface,(test_surface.get_width()*.7, test_surface.get_height()*.7))
 game_active = True
 
-mob_surface = pygame.image.load('Sprites/Slime/Side/SlimeSV.png').convert_alpha()
-#mob_surface = pygame.transform.scale(mob_surface,(mob_surface.get_width()*.3, mob_surface.get_height()*.3))
+mob_surface = pygame.image.load('Sprites/Slime/Side/Slime.png').convert_alpha()
+mob_surface = pygame.transform.scale(mob_surface,(mob_surface.get_width()*.3, mob_surface.get_height()*.3))
 
 coin_surface = font.render('$0', False, (214, 209, 69))
 coin_rect = coin_surface.get_rect(topleft = (50, 15))
@@ -22,7 +22,7 @@ mob_rect = mob_surface.get_rect(topleft = (mob_x_pos,200))
 
 
 player_surface = pygame.image.load("Sprites/SwordSp1.png").convert_alpha()
-#player_surface = pygame.transform.scale(player_surface,(player_surface.get_width()*.4, player_surface.get_height()*.4))
+player_surface = pygame.transform.scale(player_surface,(player_surface.get_width()*.4, player_surface.get_height()*.4))
 player_rect = player_surface.get_rect(midtop = (500,175)) #pygame.Rect(left, top, width, height). getRect(gets the size of the variable/object)
 #get_rect(area,(x,y)) The area changes the center of which the rect is moved. For example from center to middle bottom can be used to place image surfaces on the ground " The ultimate introduction to Pygame" 57:55
 
@@ -36,11 +36,18 @@ while True:
             exit() #ends any code that is still running. Ends the while 
         #if event.type == pygame.MOUSEBUTTONUP:
         #     print('mouse up')
-        if event.type == pygame.KEYDOWN: #Checks for button press
-            print('bp')
-            
-        if event.type == pygame.KEYUP: #Checks for the abscence of button press
-            print('nbp')
+        
+        if game_active:
+            if event.type == pygame.KEYDOWN: #Checks for button press
+                print('bp')
+            if event.type == pygame.KEYUP: #Checks for the abscence of button press
+                print('nbp')
+        else:
+            if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
+                game_active = True
+                mob_rect.x = 20 #temporary
+   
+   #Where the gameplay happens
     if game_active:
             #pygame.MOUSEMOTION: print(event.pos)   checks for mouse movement. display location of the mouse on the image surface
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
@@ -74,6 +81,8 @@ while True:
             print(pygame.mouse.get_pressed()) # checks if the player char has been clicked on by the character and which mouse click the butotn isw''' 
         if mob_rect.colliderect(player_rect):
             game_active = False #stops the frame movement when mob hits player
+    else: #Could be used for Main menu/death screen
+        screen.fill('Blue')
     pygame.display.update()#Constantly updates the window?
     clock.tick(60) # Tells the while loop to not run faster than 60fps
 
