@@ -1,13 +1,32 @@
 import pygame
 from sys import exit #might not need this is using the boolean method
 from random import randint
-pygame.init() #initializes
+
 
 class Player(pygame.sprite.Sprite):
     def __init__ (self): #initializes sprite class
         super().__init__()
-        self.image = pygame.image.load("Sprites/SwordSp1.png").convert_alpha()
-        self.rect = self.image.get_rect(midbottom = (350, 315))
+        player_down_1 = pygame.image.load("Sprites/Player/Down_anim/Fatk1.png").convert_alpha()
+        player_down_2 = pygame.image.load("Sprites/Player/Down_anim/Fatk2.png").convert_alpha()
+        player_down_3 = pygame.image.load("Sprites/Player/Down_anim/Fatk3.png").convert_alpha()
+        player_down_4 = pygame.image.load("Sprites/Player/Down_anim/Fatk4.png").convert_alpha()
+        player_down_5 = pygame.image.load("Sprites/Player/Down_anim/Fatk5.png").convert_alpha()
+        self.player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5]
+        self.player_index = 0
+
+        self.image = self.player_down[self.player_index]
+        self.rect = self.image.get_rect(center = (350, 315))
+
+
+    def player_anim(self):#NESTED IF FOR ATTACKING WHILE FACING A CERTAIN DIRECTION
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_DOWN]:
+            
+            self.player_index += 1
+            print(self.player_index)
+            if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
+            self.image = self.player_down[int(self.player_index)]
+            
     
     def player_input(self):
         keys = pygame.key.get_pressed()
@@ -16,6 +35,9 @@ class Player(pygame.sprite.Sprite):
     
     def update(self):
         self.player_input()
+        self.player_anim()
+
+
 
 def obstacle_movement(obstacle_list):
     if obstacle_list:
@@ -33,6 +55,11 @@ def collisions(player,obstacles):
             if player.colliderect(obstacle_rect): return False 
     return True
 
+'''def player_animation():
+    #decide which animation to play based on the key being pressed
+    global player_surf, player_index #2:57:43'''
+
+pygame.init() #initializes
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Slayer') #Chanes title of window
 clock = pygame.time.Clock() #To deal with time and framerate?
@@ -62,9 +89,16 @@ game_name = font.render('Slime Slayer', False, 'White')
 name_rect = game_name.get_rect(midtop = (360, 100))
 
 
-player_surface = pygame.image.load("Sprites/SwordSp1.png").convert_alpha()
-player_surface = pygame.transform.scale(player_surface,(player_surface.get_width()*.4, player_surface.get_height()*.4))
-player_rect = player_surface.get_rect(center = (350,315)) 
+player_down_1 = pygame.image.load("Sprites/Player/Down_anim/Fatk1.png").convert_alpha()
+player_down_2 = pygame.image.load("Sprites/Player/Down_anim/Fatk2.png").convert_alpha()
+player_down_3 = pygame.image.load("Sprites/Player/Down_anim/Fatk3.png").convert_alpha()
+player_down_4 = pygame.image.load("Sprites/Player/Down_anim/Fatk4.png").convert_alpha()
+player_down_5 = pygame.image.load("Sprites/Player/Down_anim/Fatk5.png").convert_alpha()
+player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5]
+player_index = 0
+player_surf = player_down[player_index]
+player_surf = pygame.transform.scale(player_surf,(player_surf.get_width()*.4, player_surf.get_height()*.4))
+player_rect = player_surf.get_rect(center = (350,315)) 
 
 #Timer
 obstacle_timer = pygame.USEREVENT + 1 #+1 is to avoid the preset events in pygame
@@ -99,8 +133,10 @@ while True:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
            player_rect.x += 1
-        screen.blit(player_surface, player_rect) #takes the player_surface and puts it in/on top of the rectangle
+        screen.blit(player_surf, player_rect) #takes the player_surface and puts it in/on top of the rectangle
+         
         player.draw(screen)
+        
         player.update()
         
         #Obstacle Movement
