@@ -32,9 +32,9 @@ class Player(pygame.sprite.Sprite):
         player_right_5 = pygame.image.load("Sprites/Player/Right_anim/Ratk5.png").convert_alpha()
         
         self.player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5 ]
-        self.player_up =             [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
-                          # player_left_1,player_left_2,player_left_3,player_left_4,player_left_5,
-                           #player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
+        self.player_up =  [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
+        self.player_left = [player_left_1,player_left_2,player_left_3,player_left_4,player_left_5]
+        self.player_right =[player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
 
         self.player_index = 0
        
@@ -44,19 +44,32 @@ class Player(pygame.sprite.Sprite):
        
         self.rect = self.image.get_rect(center = (350, 315))
 
-    def player_anim_Down(self):#NESTED IF FOR ATTACKING WHILE FACING A CERTAIN DIRECTION
+    def player_anim_Down(self):
       
         self.rect = self.image.get_rect(center = (350, 315))
-        self.player_index += .5
-        print(self.player_index)
+        self.player_index += .2
+        #print(self.player_index)
         if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
         self.image = self.player_down[int(self.player_index)]
         
     def player_anim_Up(self):      
-        self.player_index += .5
-        print(self.player_index)
-        if self.player_index >= len(self.player_up): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
-        self.image = self.player_up[int(self.player_index)]
+        self.player_index += .2
+        #print(self.player_index)
+        if self.player_index >= len(self.player_up): self.player_index = 0 
+        self.image = self.player_up[int(self.player_index)]  
+    
+    
+    def player_anim_Right(self):      
+        self.player_index += .2
+        #print(self.player_index)
+        if self.player_index >= len(self.player_right): self.player_index = 0 
+        self.image = self.player_right[int(self.player_index)]
+
+    def player_anim_Left(self):      
+        self.player_index += .2
+       # print(self.player_index)
+        if self.player_index >= len(self.player_left): self.player_index = 0 
+        self.image = self.player_left[int(self.player_index)]
         
      
     def player_input(self):
@@ -65,6 +78,10 @@ class Player(pygame.sprite.Sprite):
            self.player_anim_Down()
         if keys[pygame.K_UP]:
            self.player_anim_Up()
+        if keys[pygame.K_RIGHT]:
+           self.player_anim_Right()
+        if keys[pygame.K_LEFT]:
+           self.player_anim_Left()
         
     
     def update(self):
