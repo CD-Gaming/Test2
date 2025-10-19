@@ -39,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.player_index = 0
        
         self.image = self.player_down[self.player_index]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
        
         
        
@@ -51,27 +52,29 @@ class Player(pygame.sprite.Sprite):
         #print(self.player_index)
         if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
         self.image = self.player_down[int(self.player_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
         
     def player_anim_Up(self):      
         self.player_index += .2
         #print(self.player_index)
         if self.player_index >= len(self.player_up): self.player_index = 0 
         self.image = self.player_up[int(self.player_index)]  
-    
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
     
     def player_anim_Right(self):      
         self.player_index += .2
         #print(self.player_index)
         if self.player_index >= len(self.player_right): self.player_index = 0 
         self.image = self.player_right[int(self.player_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
 
     def player_anim_Left(self):      
         self.player_index += .2
        # print(self.player_index)
         if self.player_index >= len(self.player_left): self.player_index = 0 
         self.image = self.player_left[int(self.player_index)]
-        
-     
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
+           
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_DOWN]:
@@ -82,13 +85,18 @@ class Player(pygame.sprite.Sprite):
            self.player_anim_Right()
         if keys[pygame.K_LEFT]:
            self.player_anim_Left()
-        
-    
+           
     def update(self):
         
         self.player_input()
         
+class Mob(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
         
+        
+        self.image
+        self.rect
 
 
 
@@ -135,7 +143,7 @@ obstacle_rect_list = []
 #Text
 gameover_surf2 = s_font.render('Press [Spacebar] to start', False,'White')
 over_rect2 = gameover_surf2.get_rect(center = (360, 400))
-game_name = font.render('Slime Slayer', False, 'White')
+game_name = font.render('Slime Survivor', False, 'White')
 name_rect = game_name.get_rect(midtop = (360, 100))
 
 
