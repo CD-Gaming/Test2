@@ -1,6 +1,7 @@
 import pygame
 from sys import exit #might not need this is using the boolean method
 from random import randint
+pygame.init() #initializes 
 
 
 class Player(pygame.sprite.Sprite):
@@ -11,31 +12,66 @@ class Player(pygame.sprite.Sprite):
         player_down_3 = pygame.image.load("Sprites/Player/Down_anim/Fatk3.png").convert_alpha()
         player_down_4 = pygame.image.load("Sprites/Player/Down_anim/Fatk4.png").convert_alpha()
         player_down_5 = pygame.image.load("Sprites/Player/Down_anim/Fatk5.png").convert_alpha()
-        self.player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5]
-        self.player_index = 0
 
+        player_up_1 = pygame.image.load("Sprites/Player/Up_anim/Tatk1.png").convert_alpha()
+        player_up_2 = pygame.image.load("Sprites/Player/Up_anim/Tatk2.png").convert_alpha()
+        player_up_3 = pygame.image.load("Sprites/Player/Up_anim/Tatk3.png").convert_alpha()
+        player_up_4 = pygame.image.load("Sprites/Player/Up_anim/Tatk4.png").convert_alpha()
+        player_up_5 = pygame.image.load("Sprites/Player/Up_anim/Tatk5.png").convert_alpha()
+
+        player_left_1 = pygame.image.load("Sprites/Player/Left_anim/Latk1.png").convert_alpha()
+        player_left_2 = pygame.image.load("Sprites/Player/Left_anim/Latk2.png").convert_alpha()
+        player_left_3 = pygame.image.load("Sprites/Player/Left_anim/Latk3.png").convert_alpha()
+        player_left_4 = pygame.image.load("Sprites/Player/Left_anim/Latk4.png").convert_alpha()
+        player_left_5 = pygame.image.load("Sprites/Player/Left_anim/Latk5.png").convert_alpha()
+
+        player_right_1 = pygame.image.load("Sprites/Player/Right_anim/Ratk1.png").convert_alpha()
+        player_right_2 = pygame.image.load("Sprites/Player/Right_anim/Ratk2.png").convert_alpha()
+        player_right_3 = pygame.image.load("Sprites/Player/Right_anim/Ratk3.png").convert_alpha()
+        player_right_4 = pygame.image.load("Sprites/Player/Right_anim/Ratk4.png").convert_alpha()
+        player_right_5 = pygame.image.load("Sprites/Player/Right_anim/Ratk5.png").convert_alpha()
+        
+        self.player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5 ]
+        self.player_up =             [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
+                          # player_left_1,player_left_2,player_left_3,player_left_4,player_left_5,
+                           #player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
+
+        self.player_index = 0
+       
         self.image = self.player_down[self.player_index]
+       
+        
+       
         self.rect = self.image.get_rect(center = (350, 315))
 
-
-    def player_anim(self):#NESTED IF FOR ATTACKING WHILE FACING A CERTAIN DIRECTION
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_DOWN]:
-            
-            self.player_index += 1
-            print(self.player_index)
-            if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
-            self.image = self.player_down[int(self.player_index)]
-            
-    
+    def player_anim_Down(self):#NESTED IF FOR ATTACKING WHILE FACING A CERTAIN DIRECTION
+      
+        self.rect = self.image.get_rect(center = (350, 315))
+        self.player_index += .5
+        print(self.player_index)
+        if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
+        self.image = self.player_down[int(self.player_index)]
+        
+    def player_anim_Up(self):      
+        self.player_index += .5
+        print(self.player_index)
+        if self.player_index >= len(self.player_up): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
+        self.image = self.player_up[int(self.player_index)]
+        
+     
     def player_input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]:
-           self.rect.x += 1
+        if keys[pygame.K_DOWN]:
+           self.player_anim_Down()
+        if keys[pygame.K_UP]:
+           self.player_anim_Up()
+        
     
     def update(self):
+        
         self.player_input()
-        self.player_anim()
+        
+        
 
 
 
@@ -55,11 +91,8 @@ def collisions(player,obstacles):
             if player.colliderect(obstacle_rect): return False 
     return True
 
-'''def player_animation():
-    #decide which animation to play based on the key being pressed
-    global player_surf, player_index #2:57:43'''
 
-pygame.init() #initializes
+
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Slayer') #Chanes title of window
 clock = pygame.time.Clock() #To deal with time and framerate?
