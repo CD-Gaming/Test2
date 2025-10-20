@@ -116,6 +116,11 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_right[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        if self.rect.y > 315:
+            self.rect.y -= self.move_speed
+        elif self.rect.y < 315:
+            self.rect.y += self.move_speed
+
     
     def update(self):
         self.slime_anim_right()
