@@ -103,19 +103,29 @@ class Enemy(pygame.sprite.Sprite):
         self.slime_right = [slime_right_1,slime_right_2, slime_right_3, slime_right_4, slime_right_5, slime_right_6]
         self.enemy_index = 0
         self.image = self.slime_right[self.enemy_index]
-        self.rect = self.image.get_rect(topleft = (750, randint(100, 530)))
-
-        self.anim_speed = .1
+        
+       
+        self.rect = self.image.get_rect(center = (800, randint(300, 500)))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        self.anim_speed = .15
+        self.move_speed = 2
    
     def slime_anim_right (self):
         self.enemy_index += self.anim_speed
-        
+        self.rect.x  -= self.move_speed 
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
-        self.image = self.slime_anim_right[int(self.slime_anim_right)]
+        self.image = self.slime_right[int(self.enemy_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
     
     def update(self):
         self.slime_anim_right()
-        #self.rect.x  -= 1
+        self.destroy()
+
+    def destroy(self):
+        if self.rect.x == 350 :#and self.rect.y == 0:
+            self.kill() #destroys enemy sprite
+      #  elif 
+        
 
 
 
@@ -155,9 +165,6 @@ test_surface = pygame.transform.scale(test_surface,(test_surface.get_width()*.7,
 
 game_active = False
 
-#Enemy
-mob_surface = pygame.image.load('Sprites/Slime/Right/Rsv1.png').convert_alpha()
-mob_surface = pygame.transform.scale(mob_surface,(mob_surface.get_width()*.3, mob_surface.get_height()*.3))
 
 obstacle_rect_list = []
 
@@ -168,20 +175,11 @@ game_name = font.render('Slime Survivor', False, 'White')
 name_rect = game_name.get_rect(midtop = (360, 100))
 
 
-player_down_1 = pygame.image.load("Sprites/Player/Down_anim/Fatk1.png").convert_alpha()
-player_down_2 = pygame.image.load("Sprites/Player/Down_anim/Fatk2.png").convert_alpha()
-player_down_3 = pygame.image.load("Sprites/Player/Down_anim/Fatk3.png").convert_alpha()
-player_down_4 = pygame.image.load("Sprites/Player/Down_anim/Fatk4.png").convert_alpha()
-player_down_5 = pygame.image.load("Sprites/Player/Down_anim/Fatk5.png").convert_alpha()
-player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5]
-player_index = 0
-player_surf = player_down[player_index]
-player_surf = pygame.transform.scale(player_surf,(player_surf.get_width()*.4, player_surf.get_height()*.4))
-player_rect = player_surf.get_rect(center = (350,315)) 
+
 
 #Timer
 obstacle_timer = pygame.USEREVENT + 1 #+1 is to avoid the preset events in pygame
-pygame.time.set_timer(obstacle_timer, 1000) #triggers event and determines how often the even should be triggered. Triggers event every 1000 milli seconds (1second)
+pygame.time.set_timer(obstacle_timer, 2500) #triggers event and determines how often the even should be triggered. Triggers event every 1000 milli seconds (1second)
 
 while True:
     for event in pygame.event.get(): #check through "event"s based what event was update from the "get()" function
@@ -210,26 +208,24 @@ while True:
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
                
         #Player
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]:
-           player_rect.x += 1
-        screen.blit(player_surf, player_rect) #takes the player_surface and puts it in/on top of the rectangle
          
         player.draw(screen)
         player.update()
 
         enemy_group.draw(screen)
-        #enemy_group.update()
+        enemy_group.update()
         
         #Obstacle Movement
-        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+        enemy_group.draw(screen)
+        enemy_group.update()
+        #obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         #Collision
-        game_active = collisions(player_rect, obstacle_rect_list)
+       # game_active = collisions(player_rect, obstacle_rect_list)
        
     else: #Could be used for Main menu/death screen
         obstacle_rect_list.clear() #deletes rects when game is not running
-        player_rect.center = (350,315) #resets player character to this position
+       # player_rect.center = (350,315) #resets player character to this position
         screen.fill("#3d6396")
         #screen.blit(gameover_surf1,over_rect)
         screen.blit(game_name,name_rect)
