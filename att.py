@@ -31,10 +31,10 @@ class Player(pygame.sprite.Sprite):
         player_right_4 = pygame.image.load("Sprites/Player/Right_anim/Ratk4.png").convert_alpha()
         player_right_5 = pygame.image.load("Sprites/Player/Right_anim/Ratk5.png").convert_alpha()
         
-        self.player_down = [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5 ]
-        self.player_up =  [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
-        self.player_left = [player_left_1,player_left_2,player_left_3,player_left_4,player_left_5]
-        self.player_right =[player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
+        self.player_down =  [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5 ]
+        self.player_up =    [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
+        self.player_left =  [player_left_1,player_left_2,player_left_3,player_left_4,player_left_5]
+        self.player_right = [player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
 
         self.player_index = 0
        
@@ -100,26 +100,61 @@ class Enemy(pygame.sprite.Sprite):
         slime_right_5 = pygame.image.load('Sprites/Slime/Right/Rsv5.png').convert_alpha()
         slime_right_6 = pygame.image.load('Sprites/Slime/Right/Rsv6.png').convert_alpha()
         
-        self.slime_right = [slime_right_1,slime_right_2, slime_right_3, slime_right_4, slime_right_5, slime_right_6]
+        slime_left_1 = pygame.image.load('Sprites/Slime/Left/SSV 1.png').convert_alpha()
+        slime_left_2 = pygame.image.load('Sprites/Slime/Left/SSV 2.png').convert_alpha()
+        slime_left_3 = pygame.image.load('Sprites/Slime/Left/SSV 3.png').convert_alpha()
+        slime_left_4 = pygame.image.load('Sprites/Slime/Left/SSV 4.png').convert_alpha()
+        slime_left_5 = pygame.image.load('Sprites/Slime/Left/SSV 5.png').convert_alpha()
+        slime_left_6 = pygame.image.load('Sprites/Slime/Left/SSV 6.png').convert_alpha()
+        
+        slime_up_1 = pygame.image.load('Sprites/Slime/Front/SFV 1.png').convert_alpha()
+        slime_up_2 = pygame.image.load('Sprites/Slime/Front/SFV 2.png').convert_alpha()
+        slime_up_3 = pygame.image.load('Sprites/Slime/Front/SFV 3.png').convert_alpha()
+        slime_up_4 = pygame.image.load('Sprites/Slime/Front/SFV 4.png').convert_alpha()
+        slime_up_5 = pygame.image.load('Sprites/Slime/Front/SFV 5.png').convert_alpha()
+        slime_up_6 = pygame.image.load('Sprites/Slime/Front/Ssv6.png').convert_alpha()
+
+        slime_down_1 = pygame.image.load('Sprites/Slime/Back/SBV 1.png').convert_alpha()
+        slime_down_2 = pygame.image.load('Sprites/Slime/Back/SBV 2.png').convert_alpha()
+        slime_down_3 = pygame.image.load('Sprites/Slime/Back/SBV 3.png').convert_alpha()
+        slime_down_4 = pygame.image.load('Sprites/Slime/Back/SBV 4.png').convert_alpha()
+        slime_down_5 = pygame.image.load('Sprites/Slime/Back/SBV 5.png').convert_alpha()
+        slime_down_6 = pygame.image.load('Sprites/Slime/Back/SBV 6.png').convert_alpha()
+        
+        self.slime_right =  [slime_right_1,slime_right_2, slime_right_3, slime_right_4, slime_right_5, slime_right_6]
+        self.slime_left =   [slime_left_1, slime_left_2, slime_left_3, slime_left_4, slime_left_5, slime_left_6]
+        self.slime_up =     [slime_up_1, slime_up_2, slime_up_3, slime_up_4, slime_up_5, slime_up_6]
+        self.slime_down =   [slime_down_1, slime_down_2, slime_down_3, slime_down_4, slime_down_5, slime_down_6]
         self.enemy_index = 0
         self.image = self.slime_right[self.enemy_index]
         
        
-        self.rect = self.image.get_rect(center = (800, randint(300, 500)))
+        self.rect = self.image.get_rect(center = (775, randint(300, 500)))
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
         self.anim_speed = .15
         self.move_speed = 2
-   
+    def y_target(self):
+        if self.rect.y > 315:
+                self.rect.y -= self.move_speed
+        elif self.rect.y < 315:
+                self.rect.y += self.move_speed
+
     def slime_anim_right (self):
         self.enemy_index += self.anim_speed
         self.rect.x  -= self.move_speed 
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_right[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
-        if self.rect.y > 315:
-            self.rect.y -= self.move_speed
-        elif self.rect.y < 315:
-            self.rect.y += self.move_speed
+        self.y_target()
+
+    def slime_anim_left (self):
+        self.enemy_index += self.anim_speed
+        self.rect.x  += self.move_speed 
+        if self.enemy_index >= len(self.slime_left): self.enemy_index = 0
+        self.image = self.slime_left[int(self.enemy_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        self.y_target()
+
 
     
     def update(self):
@@ -147,6 +182,7 @@ pygame.display.set_caption('Slime Survivor') #Chanes title of window
 clock = pygame.time.Clock() #To deal with time and framerate?
 bg_music = pygame.mixer.Sound('Sound\Wbass.wav')
 bg_music.play(loops = -1) #sets the music to loop infinetly
+
 #Groups
 enemy_group = pygame.sprite.Group()
 
