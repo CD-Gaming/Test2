@@ -119,7 +119,7 @@ class Enemy(pygame.sprite.Sprite):
     
     def update(self):
         self.slime_anim_right()
-        self.destroy()
+       # self.destroy()
 
     def destroy(self):
         if self.rect.x == 350 :#and self.rect.y == 0:
@@ -127,23 +127,13 @@ class Enemy(pygame.sprite.Sprite):
       #  elif 
         
 
+def collision_sprite():
+    if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
+        enemy_group.empty()
+        return False
+    else:
+        return True
 
-
-def obstacle_movement(obstacle_list):
-    if obstacle_list:
-        for obstacle_rect in obstacle_list:
-            obstacle_rect.x -= 2
-
-            screen.blit(mob_surface,obstacle_rect)
-        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
-        return obstacle_list
-    else: return []
-
-def collisions(player,obstacles):
-    if obstacles:
-        for obstacle_rect in obstacles:
-            if player.colliderect(obstacle_rect): return False 
-    return True
 
 
 
@@ -199,29 +189,22 @@ while True:
         if game_active:
             if event.type == obstacle_timer:
                 enemy_group.add(Enemy())
-                #obstacle_rect_list.append(mob_surface.get_rect(topleft = (750, randint(0, 630)))) #gets the list and appends something new to it
-       
+                
    #Where the gameplay happens
     if game_active:
-       # if event.type == obstacle_timer  and game_active:
-          # enemy_group.add(Enemy())
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
                
         #Player
-         
         player.draw(screen)
         player.update()
 
-        enemy_group.draw(screen)
-        enemy_group.update()
-        
         #Obstacle Movement
         enemy_group.draw(screen)
         enemy_group.update()
-        #obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
+        
         #Collision
-       # game_active = collisions(player_rect, obstacle_rect_list)
+        game_active = collision_sprite()
        
     else: #Could be used for Main menu/death screen
         obstacle_rect_list.clear() #deletes rects when game is not running
