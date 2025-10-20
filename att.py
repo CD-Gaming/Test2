@@ -89,7 +89,9 @@ class Player(pygame.sprite.Sprite):
            
     def update(self):
         self.player_input()
-        
+        #Player_Hitbox()
+
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -133,11 +135,19 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
         self.anim_speed = .15
         self.move_speed = 2
+        self.enemy_timer = 0
+
     def y_target(self):
         if self.rect.y > 315:
                 self.rect.y -= self.move_speed
         elif self.rect.y < 315:
                 self.rect.y += self.move_speed
+    
+    def spawn_timer(self):
+        while self.enemy_timer <= 60000:  
+            enemy_timer += 1 #to spawn from the other sides
+
+    
 
     def slime_anim_right (self):
         self.enemy_index += self.anim_speed
@@ -168,7 +178,7 @@ class Enemy(pygame.sprite.Sprite):
         
 
 def collision_sprite():
-    if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
+    if  pygame.sprite.spritecollide(p_hitbox.sprite,enemy_group,False):
         enemy_group.empty()
         return False
     else:
@@ -179,15 +189,25 @@ def collision_sprite():
 
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Survivor') #Chanes title of window
+
+class Player_Hitbox(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.hitbox = pygame.draw.rect(screen,"#eb4c4cff", (326, 275, 45,45),5)
+        self.rect = self.hitbox.get_rect(center = (350,315))
+
+
+
 clock = pygame.time.Clock() #To deal with time and framerate?
 bg_music = pygame.mixer.Sound('Sound\Wbass.wav')
 bg_music.play(loops = -1) #sets the music to loop infinetly
-
 #Groups
 enemy_group = pygame.sprite.Group()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player()) #puts an instance of the Player class into a group single
+p_hitbox = pygame.sprite.GroupSingle()
+p_hitbox.add(Player_Hitbox())
 
 #Text
 font = pygame.font.Font('Font.ttf', 50)
@@ -236,7 +256,7 @@ while True:
    #Where the gameplay happens
     if game_active:
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
-               
+           
         #Player
         player.draw(screen)
         player.update()
@@ -252,7 +272,7 @@ while True:
     else: #Could be used for Main menu/death screen
         obstacle_rect_list.clear() #deletes rects when game is not running
        # player_rect.center = (350,315) #resets player character to this position
-        screen.fill("#3d6396")
+        screen.fill("#3d6496")
         #screen.blit(gameover_surf1,over_rect)
         screen.blit(game_name,name_rect)
         screen.blit(gameover_surf2, over_rect2)
