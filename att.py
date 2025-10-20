@@ -145,6 +145,8 @@ def collision_sprite():
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Survivor') #Chanes title of window
 clock = pygame.time.Clock() #To deal with time and framerate?
+bg_music = pygame.mixer.Sound('Sound\Wbass.wav')
+bg_music.play(loops = -1) #sets the music to loop infinetly
 #Groups
 enemy_group = pygame.sprite.Group()
 
