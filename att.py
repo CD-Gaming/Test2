@@ -109,11 +109,13 @@ class Enemy(pygame.sprite.Sprite):
    
     def slime_anim_right (self):
         self.enemy_index += self.anim_speed
+        
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_anim_right[int(self.slime_anim_right)]
     
     def update(self):
         self.slime_anim_right()
+        #self.rect.x  -= 1
 
 
 
@@ -196,14 +198,15 @@ while True:
             if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
                 game_active = True
                 #mob_rect.x = 20 #temporary
-     #   if event.type == obstacle_timer and game_active:
-         #  Enemy_group.add()
-          # obstacle_rect_list.append(mob_surface.get_rect(topleft = (750, randint(0, 630)))) #gets the list and appends something new to it
+        if game_active:
+            if event.type == obstacle_timer:
+                enemy_group.add(Enemy())
+                #obstacle_rect_list.append(mob_surface.get_rect(topleft = (750, randint(0, 630)))) #gets the list and appends something new to it
        
    #Where the gameplay happens
     if game_active:
-        if event.type == obstacle_timer: # and game_active:
-           enemy_group.add(Enemy())
+       # if event.type == obstacle_timer  and game_active:
+          # enemy_group.add(Enemy())
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
                
         #Player
@@ -216,7 +219,7 @@ while True:
         player.update()
 
         enemy_group.draw(screen)
-        
+        #enemy_group.update()
         
         #Obstacle Movement
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
