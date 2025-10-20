@@ -39,37 +39,38 @@ class Player(pygame.sprite.Sprite):
         self.player_index = 0
        
         self.image = self.player_down[self.player_index]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
-       
-        
-       
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
         self.rect = self.image.get_rect(center = (350, 315))
+        self.anim_speed = .2
 
     def player_anim_Down(self):
       
-        self.rect = self.image.get_rect(center = (350, 315))
-        self.player_index += .2
+        
+        self.player_index += self.anim_speed
         #print(self.player_index)
         if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
         self.image = self.player_down[int(self.player_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
         
     def player_anim_Up(self):      
-        self.player_index += .2
+        
+        self.player_index += self.anim_speed
         #print(self.player_index)
         if self.player_index >= len(self.player_up): self.player_index = 0 
         self.image = self.player_up[int(self.player_index)]  
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
     
-    def player_anim_Right(self):      
-        self.player_index += .2
+    def player_anim_Right(self):   
+          
+        self.player_index += self.anim_speed
         #print(self.player_index)
         if self.player_index >= len(self.player_right): self.player_index = 0 
         self.image = self.player_right[int(self.player_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
 
-    def player_anim_Left(self):      
-        self.player_index += .2
+    def player_anim_Left(self):    
+        
+        self.player_index +=self.anim_speed
        # print(self.player_index)
         if self.player_index >= len(self.player_left): self.player_index = 0 
         self.image = self.player_left[int(self.player_index)]
@@ -87,16 +88,32 @@ class Player(pygame.sprite.Sprite):
            self.player_anim_Left()
            
     def update(self):
-        
         self.player_input()
         
-class Mob(pygame.sprite.Sprite):
+class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        slime_right_1 = pygame.image.load('Sprites/Slime/Right/Rsv1.png').convert_alpha()
+        slime_right_2 = pygame.image.load('Sprites/Slime/Right/Rsv2.png').convert_alpha()
+        slime_right_3 = pygame.image.load('Sprites/Slime/Right/Rsv3.png').convert_alpha()
+        slime_right_4 = pygame.image.load('Sprites/Slime/Right/Rsv4.png').convert_alpha()
+        slime_right_5 = pygame.image.load('Sprites/Slime/Right/Rsv5.png').convert_alpha()
+        slime_right_6 = pygame.image.load('Sprites/Slime/Right/Rsv6.png').convert_alpha()
         
-        
-        self.image
-        self.rect
+        self.slime_right = [slime_right_1,slime_right_2, slime_right_3, slime_right_4, slime_right_5, slime_right_6]
+        self.enemy_index = 0
+        self.image = self.slime_right[self.enemy_index]
+        self.rect = self.image.get_rect(topleft = (750, randint(100, 530)))
+
+        self.anim_speed = .1
+   
+    def slime_anim_right (self):
+        self.enemy_index += self.anim_speed
+        if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
+        self.image = self.slime_anim_right[int(self.slime_anim_right)]
+    
+    def update(self):
+        self.slime_anim_right()
 
 
 
@@ -119,14 +136,16 @@ def collisions(player,obstacles):
 
 
 screen = pygame.display.set_mode((700,630))
-pygame.display.set_caption('Slime Slayer') #Chanes title of window
+pygame.display.set_caption('Slime Survivor') #Chanes title of window
 clock = pygame.time.Clock() #To deal with time and framerate?
+#Groups
+enemy_group = pygame.sprite.Group()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player()) #puts an instance of the Player class into a group single
 
 #Text
-font = pygame.font.Font('Font.ttf', 60)
+font = pygame.font.Font('Font.ttf', 50)
 s_font = pygame.font.Font('Font.ttf', 20)
 
 test_surface = pygame.image.load('background.png').convert()
@@ -134,8 +153,8 @@ test_surface = pygame.transform.scale(test_surface,(test_surface.get_width()*.7,
 
 game_active = False
 
-#Obstacle
-mob_surface = pygame.image.load('Sprites/Slime/Side/Slime.png').convert_alpha()
+#Enemy
+mob_surface = pygame.image.load('Sprites/Slime/Right/Rsv1.png').convert_alpha()
 mob_surface = pygame.transform.scale(mob_surface,(mob_surface.get_width()*.3, mob_surface.get_height()*.3))
 
 obstacle_rect_list = []
@@ -160,7 +179,7 @@ player_rect = player_surf.get_rect(center = (350,315))
 
 #Timer
 obstacle_timer = pygame.USEREVENT + 1 #+1 is to avoid the preset events in pygame
-pygame.time.set_timer(obstacle_timer, 500) #triggers event and determines how often the even should be triggered. Triggers event every 1000 milli seconds (1second)
+pygame.time.set_timer(obstacle_timer, 1000) #triggers event and determines how often the even should be triggered. Triggers event every 1000 milli seconds (1second)
 
 while True:
     for event in pygame.event.get(): #check through "event"s based what event was update from the "get()" function
@@ -177,16 +196,16 @@ while True:
             if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
                 game_active = True
                 #mob_rect.x = 20 #temporary
-        if event.type == obstacle_timer and game_active:
-            obstacle_rect_list.append(mob_surface.get_rect(topleft = (750, randint(0, 630)))) #gets the list and appends something new to it
-
+     #   if event.type == obstacle_timer and game_active:
+         #  Enemy_group.add()
+          # obstacle_rect_list.append(mob_surface.get_rect(topleft = (750, randint(0, 630)))) #gets the list and appends something new to it
+       
    #Where the gameplay happens
     if game_active:
-          
+        if event.type == obstacle_timer: # and game_active:
+           enemy_group.add(Enemy())
         screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
-       
-        
-        
+               
         #Player
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
@@ -194,8 +213,10 @@ while True:
         screen.blit(player_surf, player_rect) #takes the player_surface and puts it in/on top of the rectangle
          
         player.draw(screen)
-        
         player.update()
+
+        enemy_group.draw(screen)
+        
         
         #Obstacle Movement
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
