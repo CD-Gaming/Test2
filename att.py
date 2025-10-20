@@ -184,17 +184,19 @@ def collision_sprite():
     else:
         return True
 
-
+class Player_Hitbox(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        hbox = pygame.image.load("Hitbox.png").convert_alpha()
+        #self.hitbox = pygame.draw.rect(screen,"#eb4c4cff", (326, 275, 45,45),5)
+        self.image = hbox
+        self.rect = self.image.get_rect(center = (350,305))
 
 
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Survivor') #Chanes title of window
 
-class Player_Hitbox(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.hitbox = pygame.draw.rect(screen,"#eb4c4cff", (326, 275, 45,45),5)
-        self.rect = self.hitbox.get_rect(center = (350,315))
+
 
 
 
@@ -265,6 +267,8 @@ while True:
         enemy_group.draw(screen)
         enemy_group.update()
 
+        #Hitbox
+        p_hitbox.draw(screen)
         
         #Collision
         game_active = collision_sprite()
