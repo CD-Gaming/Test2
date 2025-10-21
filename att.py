@@ -92,6 +92,7 @@ class Player(pygame.sprite.Sprite):
         #Player_Hitbox()
 
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -187,8 +188,27 @@ class Player_Hitbox(pygame.sprite.Sprite):
         self.image = hbox
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
         self.rect = self.image.get_rect(center = (350,310))
+        self.move_speed = 2
+    
+    def hbox_direction(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_DOWN]:
+           self.rect.y += self.move_speed
+        if keys[pygame.K_UP]:
+           self.rect.y -= self.move_speed
+        if keys[pygame.K_RIGHT]:
+           self.rect.x += self.move_speed
+        if keys[pygame.K_LEFT]:
+           self.rect.x -= self.move_speed
 
 
+    def update(self):
+        self.hbox_direction()
+        self.reset()
+
+    def reset(self):
+        if collision_sprite() == False:
+            self.rect = self.image.get_rect(center = (350,310))
 
 
 
@@ -282,6 +302,7 @@ while True:
 
         #Hitbox
         p_hitbox.draw(screen)
+        p_hitbox.update()
         
         #Collision
        
