@@ -37,44 +37,44 @@ class Player(pygame.sprite.Sprite):
         self.player_right = [player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
 
         self.player_index = 0
-       
+        self.scale = .8
         self.image = self.player_down[self.player_index]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
-        self.rect = self.image.get_rect(center = (350, 315))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
+        self.rect = self.image.get_rect(center = (350, 340))
         self.anim_speed = .2
+        self.move_speed = 2
 
     def player_anim_Down(self):
-      
-        
         self.player_index += self.anim_speed
+        self.rect.y  += self.move_speed
         #print(self.player_index)
         if self.player_index >= len(self.player_down): self.player_index = 0 #Checks for the number of values in the list then change player index accordinly 
         self.image = self.player_down[int(self.player_index)]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
         
     def player_anim_Up(self):      
-        
         self.player_index += self.anim_speed
+        self.rect.y  -= self.move_speed 
         #print(self.player_index)
         if self.player_index >= len(self.player_up): self.player_index = 0 
         self.image = self.player_up[int(self.player_index)]  
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
     
     def player_anim_Right(self):   
-          
         self.player_index += self.anim_speed
+        self.rect.x  += self.move_speed
         #print(self.player_index)
         if self.player_index >= len(self.player_right): self.player_index = 0 
         self.image = self.player_right[int(self.player_index)]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
 
     def player_anim_Left(self):    
-        
         self.player_index +=self.anim_speed
+        self.rect.x  -= self.move_speed
        # print(self.player_index)
         if self.player_index >= len(self.player_left): self.player_index = 0 
         self.image = self.player_left[int(self.player_index)]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.6, self.image.get_height()*.6))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
            
     def player_input(self):
         keys = pygame.key.get_pressed()
@@ -137,11 +137,11 @@ class Enemy(pygame.sprite.Sprite):
         self.move_speed = 2
         self.enemy_timer = 0
 
-    def y_target(self):
-        if self.rect.y > 315:
-                self.rect.y -= self.move_speed
-        elif self.rect.y < 315:
-                self.rect.y += self.move_speed
+    #def y_target(self):
+     #   if self.rect.y > 315:
+      #          self.rect.y -= self.move_speed
+       # elif self.rect.y < 315:
+        #        self.rect.y += self.move_speed
     
     def spawn_timer(self):
         while self.enemy_timer <= 60000:  
@@ -155,7 +155,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_right[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
-        self.y_target()
+        #self.y_target()
 
     def slime_anim_left (self):
         self.enemy_index += self.anim_speed
@@ -163,26 +163,21 @@ class Enemy(pygame.sprite.Sprite):
         if self.enemy_index >= len(self.slime_left): self.enemy_index = 0
         self.image = self.slime_left[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
-        self.y_target()
+        #self.y_target()
 
 
     
     def update(self):
         self.slime_anim_right()
-       # self.destroy()
+        #Enemy_Hitbox()
+        #self.destroy()
 
     def destroy(self):
-        if self.rect.x == 350 :#and self.rect.y == 0:
-            self.kill() #destroys enemy sprite
+       # if self.rect.x == 350 :#and self.rect.y == 0:
+           self.kill() #destroys enemy sprite
       #  elif 
-        
 
-def collision_sprite():
-    if  pygame.sprite.spritecollide(p_hitbox.sprite,enemy_group,False):
-        enemy_group.empty()
-        return False
-    else:
-        return True
+
 
 class Player_Hitbox(pygame.sprite.Sprite):
     def __init__(self):
@@ -190,9 +185,22 @@ class Player_Hitbox(pygame.sprite.Sprite):
         hbox = pygame.image.load("Hitbox.png").convert_alpha()
         #self.hitbox = pygame.draw.rect(screen,"#eb4c4cff", (326, 275, 45,45),5)
         self.image = hbox
-        self.rect = self.image.get_rect(center = (350,305))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
+        self.rect = self.image.get_rect(center = (350,310))
 
 
+
+
+
+def collision_sprite():
+    if  pygame.sprite.spritecollide(p_hitbox.sprite,enemy_group,False):
+        enemy_group.empty()
+        return False
+    else:
+        return True
+    
+
+    
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Survivor') #Chanes title of window
 
@@ -201,15 +209,18 @@ pygame.display.set_caption('Slime Survivor') #Chanes title of window
 
 
 clock = pygame.time.Clock() #To deal with time and framerate?
-bg_music = pygame.mixer.Sound('Sound\Wbass.wav')
+bg_music = pygame.mixer.Sound('Sound/bass.wav')
 bg_music.play(loops = -1) #sets the music to loop infinetly
 #Groups
 enemy_group = pygame.sprite.Group()
+e_hitbox = pygame.sprite.Group()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player()) #puts an instance of the Player class into a group single
 p_hitbox = pygame.sprite.GroupSingle()
 p_hitbox.add(Player_Hitbox())
+
+
 
 #Text
 font = pygame.font.Font('Font.ttf', 50)
@@ -250,7 +261,7 @@ while True:
         else:
             if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
                 game_active = True
-                #mob_rect.x = 20 #temporary
+                
         if game_active:
             if event.type == obstacle_timer:
                 enemy_group.add(Enemy())
@@ -265,19 +276,24 @@ while True:
 
         #Obstacle Movement
         enemy_group.draw(screen)
+        e_hitbox.draw(screen)
         enemy_group.update()
+
 
         #Hitbox
         p_hitbox.draw(screen)
         
         #Collision
+       
         game_active = collision_sprite()
        
+        
+       
     else: #Could be used for Main menu/death screen
-        obstacle_rect_list.clear() #deletes rects when game is not running
-       # player_rect.center = (350,315) #resets player character to this position
+        
+      
         screen.fill("#3d6496")
-        #screen.blit(gameover_surf1,over_rect)
+        
         screen.blit(game_name,name_rect)
         screen.blit(gameover_surf2, over_rect2)
     pygame.display.update()#Constantly updates the window?
