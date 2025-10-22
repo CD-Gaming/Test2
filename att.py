@@ -84,8 +84,6 @@ class Player(pygame.sprite.Sprite):
         self.player_input()
         #Player_Hitbox()
 
-
-
 class Enemy_right(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -168,8 +166,9 @@ class Enemy_left(pygame.sprite.Sprite):
     def destroy(self):
         if self.rect.x == 0:#and self.rect.y == 0:
            self.kill() #destroys enemy sprite
-        
-    
+        if game_active == False:
+            self.kill()
+            
 class Enemy_up(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -206,8 +205,10 @@ class Enemy_up(pygame.sprite.Sprite):
         #self.destroy()
 
     def destroy(self):
-       if self.rect.y == 0:#and self.rect.y == 0:
+        if self.rect.y == 0:#and self.rect.y == 0:
            self.kill() #destroys enemy sprite
+        if game_active == False:
+            self.kill()
 
 class Enemy_down(pygame.sprite.Sprite):
     def __init__(self):
@@ -246,14 +247,15 @@ class Enemy_down(pygame.sprite.Sprite):
         #self.destroy()
 
     def destroy(self):
-       if self.rect.y == 790:#and self.rect.y == 0:
+        if self.rect.y == 790:#and self.rect.y == 0:
            self.kill() #destroys enemy sprite
-    
+        if game_active == False:
+            self.kill()
         
 def collision_sprite():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
         enemy_group.empty()
-        
+        print("Yes")
      
         return False
     else:
@@ -262,7 +264,7 @@ def collision_sprite():
 def collision_sprite2():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group2,False):
         enemy_group2.empty()
-     
+        print("No")
         return False
     else:
         return True      
@@ -301,7 +303,6 @@ enemy_group = pygame.sprite.Group()
 enemy_group2 = pygame.sprite.Group()
 enemy_group3 = pygame.sprite.Group()
 enemy_group4 = pygame.sprite.Group()
-e_hitbox = pygame.sprite.Group()
 
 
 player = pygame.sprite.GroupSingle()
@@ -318,7 +319,7 @@ game_active = False
 
 
 obstacle_rect_list = []
-count = 0
+
 
 gameover_surf2 = s_font.render('Press [Spacebar] to start', False,'White')
 over_rect2 = gameover_surf2.get_rect(center = (360, 400))
@@ -353,9 +354,8 @@ while True:
                 enemy_group.add(Enemy_left())
             if event.type == obstacle_timer and obstacle_timer > 10000:
                 enemy_group2.add(Enemy_right()) 
-                #enemy_group.add(Enemy_right())
-            else:
-                count = 0
+               
+           
    
     if game_active:
         screen.blit(test_surface,(0,0))
@@ -367,16 +367,18 @@ while True:
         #Obstacle Movement
         enemy_group.draw(screen)
         enemy_group2.draw(screen)
-        e_hitbox.draw(screen)
-        #e_hitbox2.draw(screen)
+       
         enemy_group.update()
         enemy_group2.update()
         
 
        
         #Collision
-        game_active = collision_sprite() 
-        game_active = collision_sprite2()
+        if collision_sprite() == False:
+            game_active = False
+        elif collision_sprite2() == False:
+            game_active = False
+        
        
         
        
