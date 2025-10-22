@@ -37,6 +37,8 @@ class Player(pygame.sprite.Sprite):
         self.move_speed = 2
 
     def player_anim_Down(self):
+        if self.rect.y >= 470:
+            self.rect.y = 468  
         self.player_index += self.anim_speed
         self.rect.y  += self.move_speed
         #print(self.player_index)
@@ -55,8 +57,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
     
     def player_anim_Right(self):   
-        if self.rect.x >= 702:
-            self.rect.x = 700   
+        if self.rect.x >= 630:
+            self.rect.x = 628   
         self.player_index += self.anim_speed
         self.rect.x  += self.move_speed
         #print(self.player_index)
@@ -100,7 +102,7 @@ class Enemy_right(pygame.sprite.Sprite):
         self.anim_speed = .05
         self.move_speed = 2
         self.enemy_timer = 0
-        self.enemy_size = .3
+        self.enemy_size = .35
 
         slime_right_1 = pygame.image.load('Sprites/Slime/Right1.png').convert_alpha()
         slime_right_2 = pygame.image.load('Sprites/Slime/Right2.png').convert_alpha()
@@ -141,7 +143,7 @@ class Enemy_left(pygame.sprite.Sprite):
         self.anim_speed = .05
         self.move_speed = 2
         self.enemy_timer = 0
-        self.enemy_size = .3
+        self.enemy_size = .35
 
 
         
@@ -185,7 +187,7 @@ class Enemy_up(pygame.sprite.Sprite):
         self.anim_speed = .05
         self.move_speed = 2
         self.enemy_timer = 0
-        self.enemy_size = .3
+        self.enemy_size = .35
         
         slime_up_1 = pygame.image.load('Sprites/Slime/Up1.png').convert_alpha()
         slime_up_2 = pygame.image.load('Sprites/Slime/Up2.png').convert_alpha()
@@ -226,7 +228,7 @@ class Enemy_down(pygame.sprite.Sprite):
         self.anim_speed = .05
         self.move_speed = 2
         self.enemy_timer = 0
-        self.enemy_size = .3  
+        self.enemy_size = .35
 
         slime_down_1 = pygame.image.load('Sprites/Slime/Down1.png').convert_alpha()
         slime_down_2 = pygame.image.load('Sprites/Slime/Down2.png').convert_alpha()
@@ -286,7 +288,7 @@ def collision_sprite2():
         return False
     else:
         return True        
-    
+ 
 def collision_sprite4():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group4,False):
         enemy_group4.empty()
