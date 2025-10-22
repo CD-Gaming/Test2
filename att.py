@@ -189,6 +189,7 @@ class Player_Hitbox(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
         self.rect = self.image.get_rect(center = (350,310))
         self.move_speed = 2
+        
     
     def hbox_direction(self):
         keys = pygame.key.get_pressed()
@@ -200,21 +201,22 @@ class Player_Hitbox(pygame.sprite.Sprite):
            self.rect.x += self.move_speed
         if keys[pygame.K_LEFT]:
            self.rect.x -= self.move_speed
-
+    def r(self):
+        #if game_active == False:
+                   self.rect = self.image.get_rect(center = (350,310))
+            
+        
 
     def update(self):
+        
         self.hbox_direction()
-        self.reset()
-
-    def reset(self):
-        if collision_sprite() == False:
-            self.rect = self.image.get_rect(center = (350,310))
-
-
-
+       # self.r() 
+        
 def collision_sprite():
     if  pygame.sprite.spritecollide(p_hitbox.sprite,enemy_group,False):
         enemy_group.empty()
+       # p_hitbox.update()
+       # p_hitbox.r()
         return False
     else:
         return True
@@ -268,15 +270,15 @@ obstacle_timer = pygame.USEREVENT + 1 #+1 is to avoid the preset events in pygam
 pygame.time.set_timer(obstacle_timer, 2500) #triggers event and determines how often the even should be triggered. Triggers event every 1000 milli seconds (1second)
 
 while True:
-    for event in pygame.event.get(): #check through "event"s based what event was update from the "get()" function
-        if event.type == pygame.QUIT: #meaning if the x button is 
-            pygame.quit() #closes the game. Uninitializes, causes an error by itself
-            exit() #ends any code that is still running. Ends the while 
-        
+    for event in pygame.event.get(): 
+        if event.type == pygame.QUIT: 
+            pygame.quit() 
+            exit()
+
         if game_active:
-            if event.type == pygame.KEYDOWN: #Checks for button press
+            if event.type == pygame.KEYDOWN: 
                 print('bp')
-            if event.type == pygame.KEYUP: #Checks for the abscence of button press
+            if event.type == pygame.KEYUP: 
                 print('nbp')
         else:
             if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
@@ -286,9 +288,9 @@ while True:
             if event.type == obstacle_timer:
                 enemy_group.add(Enemy())
                 
-   #Where the gameplay happens
+   
     if game_active:
-        screen.blit(test_surface,(0,0)) #X goes to the right and Y goes down
+        screen.blit(test_surface,(0,0))
            
         #Player
         player.draw(screen)
@@ -298,30 +300,26 @@ while True:
         enemy_group.draw(screen)
         e_hitbox.draw(screen)
         enemy_group.update()
-
+        
 
         #Hitbox
         p_hitbox.draw(screen)
         p_hitbox.update()
         
         #Collision
-       
-        game_active = collision_sprite()
+        game_active = collision_sprite() 
        
         
        
-    else: #Could be used for Main menu/death screen
+    else: 
         
-      
+       
         screen.fill("#3d6496")
         
         screen.blit(game_name,name_rect)
         screen.blit(gameover_surf2, over_rect2)
-    pygame.display.update()#Constantly updates the window?
-    clock.tick(60) # Tells the while loop to not run faster than 60fps
+       
+    pygame.display.update()
+    clock.tick(60)
 
-    '''Functions of the Sprite Class,
-        draw()
-        update()
-    '''
-
+  
