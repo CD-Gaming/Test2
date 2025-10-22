@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy_right(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.anim_speed = .05
@@ -97,137 +97,217 @@ class Enemy(pygame.sprite.Sprite):
         slime_right_1 = pygame.image.load('Sprites/Slime/Right1.png').convert_alpha()
         slime_right_2 = pygame.image.load('Sprites/Slime/Right2.png').convert_alpha()
         
-        slime_left_1 = pygame.image.load('Sprites/Slime/Left1.png').convert_alpha()
-        slime_left_2 = pygame.image.load('Sprites/Slime/Left2.png').convert_alpha()
-        
-        
-        slime_up_1 = pygame.image.load('Sprites/Slime/Up1.png').convert_alpha()
-        slime_up_2 = pygame.image.load('Sprites/Slime/Up2.png').convert_alpha()
-        
-
-        slime_down_1 = pygame.image.load('Sprites/Slime/Down1.png').convert_alpha()
-        slime_down_2 = pygame.image.load('Sprites/Slime/Down2.png').convert_alpha()
-        
-        
-        self.slime_left =   [slime_left_1, slime_left_2]
         self.slime_right =  [slime_right_1,slime_right_2]
         
-        self.slime_up =     [slime_up_1, slime_up_2]
-        self.slime_down =   [slime_down_1, slime_down_2]
         self.enemy_index = 0
-        self.image = self.slime_left[self.enemy_index]
-        
-       
-        self.rect = self.image.get_rect(center = (775, randint(300, 500)))
-        #self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
-        
-
-    #def y_target(self):
-     #   if self.rect.y > 315:
-      #          self.rect.y -= self.move_speed
-       # elif self.rect.y < 315:
-        #        self.rect.y += self.move_speed
-    
-    def spawn_timer(self):
-        while self.enemy_timer <= 60000:  
-            enemy_timer += 1 #to spawn from the other sides
+        self.image = self.slime_right[self.enemy_index]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
+        self.rect = self.image.get_rect(center = (-20, randint(300, 500)))
 
     
 
     def slime_anim_right (self):
+       
         self.enemy_index += self.anim_speed
         self.rect.x  += self.move_speed 
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_right[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
         #self.y_target()
+    
+    def update(self):
+        self.slime_anim_right()
+        
+        self.destroy()
+
+    def destroy(self):
+        if self.rect.x == 650:#and self.rect.y == 0:
+           self.kill() #destroys enemy sprite
+      #  elif 
+        if game_active == False:
+            self.kill()
+
+class Enemy_left(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.anim_speed = .05
+        self.move_speed = 2
+        self.enemy_timer = 0
+        self.enemy_size = .3
+
+
+        
+        slime_left_1 = pygame.image.load('Sprites/Slime/Left1.png').convert_alpha()
+        slime_left_2 = pygame.image.load('Sprites/Slime/Left2.png').convert_alpha()
+        
+  
+        
+        
+        self.slime_left =   [slime_left_1, slime_left_2]
+       
+        self.enemy_index = 0
+        self.image = self.slime_left[self.enemy_index]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
+       
+        self.rect = self.image.get_rect(center = (775, randint(300, 500)))
 
     def slime_anim_left (self):
+        
         self.enemy_index += self.anim_speed
         self.rect.x  -= self.move_speed 
         if self.enemy_index >= len(self.slime_left): self.enemy_index = 0
         self.image = self.slime_left[int(self.enemy_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
         #self.y_target()
-
-
     
     def update(self):
         self.slime_anim_left()
-        #Enemy_Hitbox()
+        
+        self.destroy()
+
+    def destroy(self):
+        if self.rect.x == 0:#and self.rect.y == 0:
+           self.kill() #destroys enemy sprite
+        
+    
+class Enemy_up(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.anim_speed = .05
+        self.move_speed = 2
+        self.enemy_timer = 0
+        self.enemy_size = .3
+        
+        slime_up_1 = pygame.image.load('Sprites/Slime/Up1.png').convert_alpha()
+        slime_up_2 = pygame.image.load('Sprites/Slime/Up2.png').convert_alpha()
+
+        self.slime_up =     [slime_up_1, slime_up_2]
+     
+        self.enemy_index = 0
+        self.image = self.slime_up[self.enemy_index]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
+        self.rect = self.image.get_rect(center = (randint(300, 500), 790))
+    
+    def spawn_timer(self):
+        while self.enemy_timer <= 30000:  
+            enemy_timer += 1 #to spawn from the other sides
+
+    def slime_anim_up (self):
+        
+        self.enemy_index += self.anim_speed
+        self.rect.y  -= self.move_speed 
+        if self.enemy_index >= len(self.slime_up): self.enemy_index = 0
+        self.image = self.slime_up[int(self.enemy_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
+        
+    def update(self):
+        self.slime_anim_up()
+        
         #self.destroy()
 
     def destroy(self):
-       # if self.rect.x == 350 :#and self.rect.y == 0:
+       if self.rect.y == 0:#and self.rect.y == 0:
            self.kill() #destroys enemy sprite
-      #  elif 
 
-
-
-'''class Player_Hitbox(pygame.sprite.Sprite):
+class Enemy_down(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        hbox = pygame.image.load("Hitbox.png").convert_alpha()
-        #self.hitbox = pygame.draw.rect(screen,"#eb4c4cff", (326, 275, 45,45),5)
-        self.image = hbox
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.4, self.image.get_height()*.4))
-        self.rect = self.image.get_rect(center = (350,310))
+        self.anim_speed = .05
         self.move_speed = 2
+        self.enemy_timer = 0
+        self.enemy_size = .3  
+
+        slime_down_1 = pygame.image.load('Sprites/Slime/Down1.png').convert_alpha()
+        slime_down_2 = pygame.image.load('Sprites/Slime/Down2.png').convert_alpha()
+        
+        
+        self.slime_down =   [slime_down_1, slime_down_2]
+        self.enemy_index = 0
+        self.image = self.slime_down[self.enemy_index]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
+        self.rect = self.image.get_rect(center = (randint(300, 500), 0))
+    
+    def spawn_timer(self):
+        while self.enemy_timer <= 45000:  
+            enemy_timer += 1 #to spawn from the other sides
+
+    def slime_anim_down (self):
+        
+        self.enemy_index += self.anim_speed
+        self.rect.y  += self.move_speed 
+        if self.enemy_index >= len(self.slime_down): self.enemy_index = 0
+        self.image = self.slime_down[int(self.enemy_index)]
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
         
     
-    def hbox_direction(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_DOWN]:
-           self.rect.y += self.move_speed
-        if keys[pygame.K_UP]:
-           self.rect.y -= self.move_speed
-        if keys[pygame.K_RIGHT]:
-           self.rect.x += self.move_speed
-        if keys[pygame.K_LEFT]:
-           self.rect.x -= self.move_speed
-    def r(self):
-        #if game_active == False:
-                   self.rect = self.image.get_rect(center = (350,310))
-            
-        
-
     def update(self):
+        self.slime_anim_down()
         
-        self.hbox_direction()
-       # self.r() '''
+        #self.destroy()
+
+    def destroy(self):
+       if self.rect.y == 790:#and self.rect.y == 0:
+           self.kill() #destroys enemy sprite
+    
         
 def collision_sprite():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
         enemy_group.empty()
+        
+     
+        return False
+    else:
+        return True   
+         
+def collision_sprite2():
+    if  pygame.sprite.spritecollide(player.sprite,enemy_group2,False):
+        enemy_group2.empty()
+     
+        return False
+    else:
+        return True      
+      
+'''def collision_sprite3():
+    if  pygame.sprite.spritecollide(player.sprite,enemy_group3,False):
+        enemy_group3.empty()
+     
+        return False
+    else:
+        return True        
+    
+def collision_sprite4():
+    if  pygame.sprite.spritecollide(player.sprite,enemy_group4,False):
+        enemy_group4.empty()
      
         return False
     else:
         return True
-    
+    '''
 
     
 screen = pygame.display.set_mode((700,630))
-pygame.display.set_caption('Slime Survivor') #Chanes title of window
+pygame.display.set_caption('Slime Survivor') 
 
 
 
 
 
-clock = pygame.time.Clock() #To deal with time and framerate?
+clock = pygame.time.Clock() 
 bg_music = pygame.mixer.Sound('Sound/bass.wav')
-bg_music.play(loops = -1) #sets the music to loop infinetly
-#Groups
+bg_music.play(loops = -1)
+
+
 enemy_group = pygame.sprite.Group()
+enemy_group2 = pygame.sprite.Group()
+enemy_group3 = pygame.sprite.Group()
+enemy_group4 = pygame.sprite.Group()
 e_hitbox = pygame.sprite.Group()
 
+
 player = pygame.sprite.GroupSingle()
-player.add(Player()) #puts an instance of the Player class into a group single
-#p_hitbox = pygame.sprite.GroupSingle()
-#p_hitbox.add(Player_Hitbox())
+player.add(Player()) 
 
 
-
-#Text
 font = pygame.font.Font('Font.ttf', 50)
 s_font = pygame.font.Font('Font.ttf', 20)
 
@@ -238,8 +318,8 @@ game_active = False
 
 
 obstacle_rect_list = []
+count = 0
 
-#Text
 gameover_surf2 = s_font.render('Press [Spacebar] to start', False,'White')
 over_rect2 = gameover_surf2.get_rect(center = (360, 400))
 game_name = font.render('Slime Survivor', False, 'White')
@@ -268,34 +348,44 @@ while True:
                 game_active = True
                 
         if game_active:
+            #ENEMY SPAWN TIMER
             if event.type == obstacle_timer:
-                enemy_group.add(Enemy())
-                
+                enemy_group.add(Enemy_left())
+            if event.type == obstacle_timer and obstacle_timer > 10000:
+                enemy_group2.add(Enemy_right()) 
+                #enemy_group.add(Enemy_right())
+            else:
+                count = 0
    
     if game_active:
         screen.blit(test_surface,(0,0))
-           
+        
         #Player
         player.draw(screen)
         player.update()
 
         #Obstacle Movement
         enemy_group.draw(screen)
+        enemy_group2.draw(screen)
         e_hitbox.draw(screen)
+        #e_hitbox2.draw(screen)
         enemy_group.update()
+        enemy_group2.update()
         
 
-        #Hitbox
-        p_hitbox.draw(screen)
-        p_hitbox.update()
-        
+       
         #Collision
         game_active = collision_sprite() 
+        game_active = collision_sprite2()
        
         
        
     else: 
         
+        enemy_group.empty()
+        enemy_group2.empty()
+        enemy_group3.empty()
+        enemy_group4.empty()
        
         screen.fill("#3d6496")
         
