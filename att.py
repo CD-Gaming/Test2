@@ -35,10 +35,11 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (350, 340))
         self.anim_speed = .2
         self.move_speed = 2
+        self.walk_sound = pygame.mixer.Sound('Sound/Grass_step.wav')
 
     def player_anim_Down(self):
-        if self.rect.y >= 470:
-            self.rect.y = 468  
+        if self.rect.y >= 480:
+            self.rect.y = 478  
         self.player_index += self.anim_speed
         self.rect.y  += self.move_speed
         #print(self.player_index)
@@ -47,8 +48,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
         
     def player_anim_Up(self):     
-        if self.rect.y <= 133:
-            self.rect.y = 135  
+        if self.rect.y <= -2:
+            self.rect.y = 0  
         self.player_index += self.anim_speed
         self.rect.y  -= self.move_speed 
         #print(self.player_index)
@@ -79,14 +80,18 @@ class Player(pygame.sprite.Sprite):
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_DOWN]:
-           self.player_anim_Down()
-        if keys[pygame.K_UP]:
-           self.player_anim_Up()
-        if keys[pygame.K_RIGHT]:
-           self.player_anim_Right()
-        if keys[pygame.K_LEFT]:
-           self.player_anim_Left()
+            self.player_anim_Down()
+           # self.walk_sound.play(loops = 1)
            
+        if keys[pygame.K_UP]:
+            self.player_anim_Up()
+
+        if keys[pygame.K_RIGHT]:
+            self.player_anim_Right()
+               
+        if keys[pygame.K_LEFT]:
+            self.player_anim_Left()
+            
     def update(self):
         self.player_input()
         if game_active == False:
@@ -197,7 +202,7 @@ class Enemy_up(pygame.sprite.Sprite):
         self.enemy_index = 0
         self.image = self.slime_up[self.enemy_index]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
-        self.rect = self.image.get_rect(center = (randint(300, 500), 790))
+        self.rect = self.image.get_rect(center = (randint(100, 600), 790))
     
     def spawn_timer(self):
         while self.enemy_timer <= 30000:  
@@ -238,7 +243,7 @@ class Enemy_down(pygame.sprite.Sprite):
         self.enemy_index = 0
         self.image = self.slime_down[self.enemy_index]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
-        self.rect = self.image.get_rect(center = (randint(300, 500), 0))
+        self.rect = self.image.get_rect(center = (randint(100, 600), 0))
     
     def spawn_timer(self):
         while self.enemy_timer <= 45000:  
@@ -281,7 +286,7 @@ def collision_sprite2():
     else:
         return True      
       
-'''def collision_sprite3():
+def collision_sprite3():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group3,False):
         enemy_group3.empty()
      
@@ -296,7 +301,7 @@ def collision_sprite4():
         return False
     else:
         return True
-    '''
+    
 
 def display_score():
     current_time = int(pygame.time.get_ticks()/1000)  - start_time
@@ -372,9 +377,15 @@ while True:
                 
             
                 enemy_group.add(Enemy_left())
-            if event.type == obstacle_timer and count >= 300:
+            if event.type == obstacle_timer and count >= 500:
                 
-                enemy_group2.add(Enemy_right()) 
+                enemy_group2.add(Enemy_right())
+            if event.type == obstacle_timer and count >= 1000:
+                
+                enemy_group3.add(Enemy_up()) 
+            if event.type == obstacle_timer and count >= 2000:
+                
+                enemy_group3.add(Enemy_right())
                
            
    
@@ -389,9 +400,13 @@ while True:
         #Obstacle Movement
         enemy_group.draw(screen)
         enemy_group2.draw(screen)
+        enemy_group3.draw(screen)
+        enemy_group4.draw(screen)
        
         enemy_group.update()
         enemy_group2.update()
+        enemy_group3.update()
+        enemy_group4.update()
         
 
        
@@ -399,6 +414,10 @@ while True:
         if collision_sprite() == False:
             game_active = False
         elif collision_sprite2() == False:
+            game_active = False
+        elif collision_sprite3() == False:
+            game_active = False
+        elif collision_sprite4() == False:
             game_active = False
         
        
