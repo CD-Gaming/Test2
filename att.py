@@ -7,35 +7,27 @@ pygame.init() #initializes
 class Player(pygame.sprite.Sprite):
     def __init__ (self): #initializes sprite class
         super().__init__()
-        player_down_1 = pygame.image.load("Sprites/Player/Down_anim/Fatk1.png").convert_alpha()
-        player_down_2 = pygame.image.load("Sprites/Player/Down_anim/Fatk2.png").convert_alpha()
-        player_down_3 = pygame.image.load("Sprites/Player/Down_anim/Fatk3.png").convert_alpha()
-        player_down_4 = pygame.image.load("Sprites/Player/Down_anim/Fatk4.png").convert_alpha()
-        player_down_5 = pygame.image.load("Sprites/Player/Down_anim/Fatk5.png").convert_alpha()
-
-        player_up_1 = pygame.image.load("Sprites/Player/Up_anim/Tatk1.png").convert_alpha()
-        player_up_2 = pygame.image.load("Sprites/Player/Up_anim/Tatk2.png").convert_alpha()
-        player_up_3 = pygame.image.load("Sprites/Player/Up_anim/Tatk3.png").convert_alpha()
-        player_up_4 = pygame.image.load("Sprites/Player/Up_anim/Tatk4.png").convert_alpha()
-        player_up_5 = pygame.image.load("Sprites/Player/Up_anim/Tatk5.png").convert_alpha()
-
-        player_left_1 = pygame.image.load("Sprites/Player/Left_anim/Latk1.png").convert_alpha()
-        player_left_2 = pygame.image.load("Sprites/Player/Left_anim/Latk2.png").convert_alpha()
-        player_left_3 = pygame.image.load("Sprites/Player/Left_anim/Latk3.png").convert_alpha()
-        player_left_4 = pygame.image.load("Sprites/Player/Left_anim/Latk4.png").convert_alpha()
-        player_left_5 = pygame.image.load("Sprites/Player/Left_anim/Latk5.png").convert_alpha()
-
-        player_right_1 = pygame.image.load("Sprites/Player/Right_anim/Ratk1.png").convert_alpha()
-        player_right_2 = pygame.image.load("Sprites/Player/Right_anim/Ratk2.png").convert_alpha()
-        player_right_3 = pygame.image.load("Sprites/Player/Right_anim/Ratk3.png").convert_alpha()
-        player_right_4 = pygame.image.load("Sprites/Player/Right_anim/Ratk4.png").convert_alpha()
-        player_right_5 = pygame.image.load("Sprites/Player/Right_anim/Ratk5.png").convert_alpha()
+        player_down_1 = pygame.image.load("Sprites/Player/Down1.png").convert_alpha()
+        player_down_2 = pygame.image.load("Sprites/Player/Down2.png").convert_alpha()
+        player_down_3 = pygame.image.load("Sprites/Player/Down3.png").convert_alpha()
         
-        self.player_down =  [player_down_1,player_down_2,player_down_3,player_down_4,player_down_5 ]
-        self.player_up =    [player_up_1,player_up_2,player_up_3,player_up_4,player_up_5]
-        self.player_left =  [player_left_1,player_left_2,player_left_3,player_left_4,player_left_5]
-        self.player_right = [player_right_1,player_right_2,player_right_3,player_right_4,player_right_5]
 
+        player_up_1 = pygame.image.load("Sprites/Player/Up1.png").convert_alpha()
+        player_up_2 = pygame.image.load("Sprites/Player/Up2.png").convert_alpha()
+        player_up_3 = pygame.image.load("Sprites/Player/Up3.png").convert_alpha()
+        
+        player_left_1 = pygame.image.load("Sprites/Player/Left1.png").convert_alpha()
+        player_left_2 = pygame.image.load("Sprites/Player/Left2.png").convert_alpha()
+        player_left_3 = pygame.image.load("Sprites/Player/Left3.png").convert_alpha()
+
+        player_right_1 = pygame.image.load("Sprites/Player/Right1.png").convert_alpha()
+        player_right_2 = pygame.image.load("Sprites/Player/Right2.png").convert_alpha()
+        player_right_3 = pygame.image.load("Sprites/Player/Right3.png").convert_alpha()
+        
+        self.player_down =  [player_down_1,player_down_2,player_down_3 ]
+        self.player_up =    [player_up_1,player_up_2,player_up_3]
+        self.player_left =  [player_left_1,player_left_2,player_left_3]
+        self.player_right = [player_right_1,player_right_2,player_right_3]
         self.player_index = 0
         self.scale = .8
         self.image = self.player_down[self.player_index]
@@ -80,6 +72,7 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_DOWN]:
            self.player_anim_Down()
+        
         if keys[pygame.K_UP]:
            self.player_anim_Up()
         if keys[pygame.K_RIGHT]:
@@ -96,47 +89,38 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        slime_right_1 = pygame.image.load('Sprites/Slime/Right/Rsv1.png').convert_alpha()
-        slime_right_2 = pygame.image.load('Sprites/Slime/Right/Rsv2.png').convert_alpha()
-        slime_right_3 = pygame.image.load('Sprites/Slime/Right/Rsv3.png').convert_alpha()
-        slime_right_4 = pygame.image.load('Sprites/Slime/Right/Rsv4.png').convert_alpha()
-        slime_right_5 = pygame.image.load('Sprites/Slime/Right/Rsv5.png').convert_alpha()
-        slime_right_6 = pygame.image.load('Sprites/Slime/Right/Rsv6.png').convert_alpha()
-        
-        slime_left_1 = pygame.image.load('Sprites/Slime/Left/SSV 1.png').convert_alpha()
-        slime_left_2 = pygame.image.load('Sprites/Slime/Left/SSV 2.png').convert_alpha()
-        slime_left_3 = pygame.image.load('Sprites/Slime/Left/SSV 3.png').convert_alpha()
-        slime_left_4 = pygame.image.load('Sprites/Slime/Left/SSV 4.png').convert_alpha()
-        slime_left_5 = pygame.image.load('Sprites/Slime/Left/SSV 5.png').convert_alpha()
-        slime_left_6 = pygame.image.load('Sprites/Slime/Left/SSV 6.png').convert_alpha()
-        
-        slime_up_1 = pygame.image.load('Sprites/Slime/Front/SFV 1.png').convert_alpha()
-        slime_up_2 = pygame.image.load('Sprites/Slime/Front/SFV 2.png').convert_alpha()
-        slime_up_3 = pygame.image.load('Sprites/Slime/Front/SFV 3.png').convert_alpha()
-        slime_up_4 = pygame.image.load('Sprites/Slime/Front/SFV 4.png').convert_alpha()
-        slime_up_5 = pygame.image.load('Sprites/Slime/Front/SFV 5.png').convert_alpha()
-        slime_up_6 = pygame.image.load('Sprites/Slime/Front/Ssv6.png').convert_alpha()
+        self.anim_speed = .05
+        self.move_speed = 2
+        self.enemy_timer = 0
+        self.enemy_size = .3
 
-        slime_down_1 = pygame.image.load('Sprites/Slime/Back/SBV 1.png').convert_alpha()
-        slime_down_2 = pygame.image.load('Sprites/Slime/Back/SBV 2.png').convert_alpha()
-        slime_down_3 = pygame.image.load('Sprites/Slime/Back/SBV 3.png').convert_alpha()
-        slime_down_4 = pygame.image.load('Sprites/Slime/Back/SBV 4.png').convert_alpha()
-        slime_down_5 = pygame.image.load('Sprites/Slime/Back/SBV 5.png').convert_alpha()
-        slime_down_6 = pygame.image.load('Sprites/Slime/Back/SBV 6.png').convert_alpha()
+        slime_right_1 = pygame.image.load('Sprites/Slime/Right1.png').convert_alpha()
+        slime_right_2 = pygame.image.load('Sprites/Slime/Right2.png').convert_alpha()
         
-        self.slime_right =  [slime_right_1,slime_right_2, slime_right_3, slime_right_4, slime_right_5, slime_right_6]
-        self.slime_left =   [slime_left_1, slime_left_2, slime_left_3, slime_left_4, slime_left_5, slime_left_6]
-        self.slime_up =     [slime_up_1, slime_up_2, slime_up_3, slime_up_4, slime_up_5, slime_up_6]
-        self.slime_down =   [slime_down_1, slime_down_2, slime_down_3, slime_down_4, slime_down_5, slime_down_6]
+        slime_left_1 = pygame.image.load('Sprites/Slime/Left1.png').convert_alpha()
+        slime_left_2 = pygame.image.load('Sprites/Slime/Left2.png').convert_alpha()
+        
+        
+        slime_up_1 = pygame.image.load('Sprites/Slime/Up1.png').convert_alpha()
+        slime_up_2 = pygame.image.load('Sprites/Slime/Up2.png').convert_alpha()
+        
+
+        slime_down_1 = pygame.image.load('Sprites/Slime/Down1.png').convert_alpha()
+        slime_down_2 = pygame.image.load('Sprites/Slime/Down2.png').convert_alpha()
+        
+        
+        self.slime_left =   [slime_left_1, slime_left_2]
+        self.slime_right =  [slime_right_1,slime_right_2]
+        
+        self.slime_up =     [slime_up_1, slime_up_2]
+        self.slime_down =   [slime_down_1, slime_down_2]
         self.enemy_index = 0
-        self.image = self.slime_right[self.enemy_index]
+        self.image = self.slime_left[self.enemy_index]
         
        
         self.rect = self.image.get_rect(center = (775, randint(300, 500)))
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
-        self.anim_speed = .15
-        self.move_speed = 2
-        self.enemy_timer = 0
+        #self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        
 
     #def y_target(self):
      #   if self.rect.y > 315:
@@ -152,24 +136,24 @@ class Enemy(pygame.sprite.Sprite):
 
     def slime_anim_right (self):
         self.enemy_index += self.anim_speed
-        self.rect.x  -= self.move_speed 
+        self.rect.x  += self.move_speed 
         if self.enemy_index >= len(self.slime_right): self.enemy_index = 0
         self.image = self.slime_right[int(self.enemy_index)]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
         #self.y_target()
 
     def slime_anim_left (self):
         self.enemy_index += self.anim_speed
-        self.rect.x  += self.move_speed 
+        self.rect.x  -= self.move_speed 
         if self.enemy_index >= len(self.slime_left): self.enemy_index = 0
         self.image = self.slime_left[int(self.enemy_index)]
-        self.image = pygame.transform.scale(self.image,(self.image.get_width()*.2, self.image.get_height()*.2))
+        self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
         #self.y_target()
 
 
     
     def update(self):
-        self.slime_anim_right()
+        self.slime_anim_left()
         #Enemy_Hitbox()
         #self.destroy()
 
@@ -180,7 +164,7 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-class Player_Hitbox(pygame.sprite.Sprite):
+'''class Player_Hitbox(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         hbox = pygame.image.load("Hitbox.png").convert_alpha()
@@ -210,13 +194,12 @@ class Player_Hitbox(pygame.sprite.Sprite):
     def update(self):
         
         self.hbox_direction()
-       # self.r() 
+       # self.r() '''
         
 def collision_sprite():
-    if  pygame.sprite.spritecollide(p_hitbox.sprite,enemy_group,False):
+    if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
         enemy_group.empty()
-       # p_hitbox.update()
-       # p_hitbox.r()
+     
         return False
     else:
         return True
@@ -239,8 +222,8 @@ e_hitbox = pygame.sprite.Group()
 
 player = pygame.sprite.GroupSingle()
 player.add(Player()) #puts an instance of the Player class into a group single
-p_hitbox = pygame.sprite.GroupSingle()
-p_hitbox.add(Player_Hitbox())
+#p_hitbox = pygame.sprite.GroupSingle()
+#p_hitbox.add(Player_Hitbox())
 
 
 
