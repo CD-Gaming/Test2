@@ -44,7 +44,9 @@ class Player(pygame.sprite.Sprite):
         self.image = self.player_down[int(self.player_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
         
-    def player_anim_Up(self):      
+    def player_anim_Up(self):     
+        if self.rect.y <= 133:
+            self.rect.y = 135  
         self.player_index += self.anim_speed
         self.rect.y  -= self.move_speed 
         #print(self.player_index)
@@ -53,6 +55,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
     
     def player_anim_Right(self):   
+        if self.rect.x >= 702:
+            self.rect.x = 700   
         self.player_index += self.anim_speed
         self.rect.x  += self.move_speed
         #print(self.player_index)
@@ -60,7 +64,9 @@ class Player(pygame.sprite.Sprite):
         self.image = self.player_right[int(self.player_index)]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
 
-    def player_anim_Left(self):    
+    def player_anim_Left(self): 
+        if self.rect.x <= -2:
+            self.rect.x = 0   
         self.player_index +=self.anim_speed
         self.rect.x  -= self.move_speed
        # print(self.player_index)
@@ -72,7 +78,6 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_DOWN]:
            self.player_anim_Down()
-        
         if keys[pygame.K_UP]:
            self.player_anim_Up()
         if keys[pygame.K_RIGHT]:
@@ -82,7 +87,12 @@ class Player(pygame.sprite.Sprite):
            
     def update(self):
         self.player_input()
-        #Player_Hitbox()
+        if game_active == False:
+            self.image = self.player_down[0]
+
+            self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.scale, self.image.get_height()*self.scale))
+
+            self.rect = self.image.get_rect(center = (350, 340))
 
 class Enemy_right(pygame.sprite.Sprite):
     def __init__(self):
@@ -100,7 +110,7 @@ class Enemy_right(pygame.sprite.Sprite):
         self.enemy_index = 0
         self.image = self.slime_right[self.enemy_index]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
-        self.rect = self.image.get_rect(center = (-20, randint(300, 500)))
+        self.rect = self.image.get_rect(center = (-20, randint(200, 500)))
 
     
 
@@ -147,7 +157,7 @@ class Enemy_left(pygame.sprite.Sprite):
         self.image = self.slime_left[self.enemy_index]
         self.image = pygame.transform.scale(self.image,(self.image.get_width()*self.enemy_size, self.image.get_height()*self.enemy_size))
        
-        self.rect = self.image.get_rect(center = (775, randint(300, 500)))
+        self.rect = self.image.get_rect(center = (775, randint(200, 500)))
 
     def slime_anim_left (self):
         
@@ -202,7 +212,7 @@ class Enemy_up(pygame.sprite.Sprite):
     def update(self):
         self.slime_anim_up()
         
-        #self.destroy()
+        self.destroy()
 
     def destroy(self):
         if self.rect.y == 0:#and self.rect.y == 0:
@@ -244,7 +254,7 @@ class Enemy_down(pygame.sprite.Sprite):
     def update(self):
         self.slime_anim_down()
         
-        #self.destroy()
+        self.destroy()
 
     def destroy(self):
         if self.rect.y == 790:#and self.rect.y == 0:
@@ -255,7 +265,7 @@ class Enemy_down(pygame.sprite.Sprite):
 def collision_sprite():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group,False):
         enemy_group.empty()
-        print("Yes")
+        
      
         return False
     else:
@@ -264,7 +274,7 @@ def collision_sprite():
 def collision_sprite2():
     if  pygame.sprite.spritecollide(player.sprite,enemy_group2,False):
         enemy_group2.empty()
-        print("No")
+        
         return False
     else:
         return True      
@@ -286,19 +296,24 @@ def collision_sprite4():
         return True
     '''
 
-    
+def display_score():
+    current_time = int(pygame.time.get_ticks()/1000)  - start_time
+    score_surf = s_font.render(f'Score: {current_time}', False,"#083b02")
+    score_rect = score_surf.get_rect(center = (350, 500))
+    screen.blit(score_surf, score_rect)
+    return current_time
+   
 screen = pygame.display.set_mode((700,630))
 pygame.display.set_caption('Slime Survivor') 
-
-
-
-
 
 clock = pygame.time.Clock() 
 bg_music = pygame.mixer.Sound('Sound/bass.wav')
 bg_music.play(loops = -1)
+start_time = 0
+score = 0
+h_score = 0
 
-
+count = 0
 enemy_group = pygame.sprite.Group()
 enemy_group2 = pygame.sprite.Group()
 enemy_group3 = pygame.sprite.Group()
@@ -347,19 +362,24 @@ while True:
         else:
             if event.type == pygame.KEYDOWN  and event.key == pygame.K_SPACE:
                 game_active = True
+                start_time = int(pygame.time.get_ticks()/ 1000)
                 
         if game_active:
             #ENEMY SPAWN TIMER
             if event.type == obstacle_timer:
+                
+            
                 enemy_group.add(Enemy_left())
-            if event.type == obstacle_timer and obstacle_timer > 10000:
+            if event.type == obstacle_timer and count >= 300:
+                
                 enemy_group2.add(Enemy_right()) 
                
            
    
     if game_active:
         screen.blit(test_surface,(0,0))
-        
+        count += 1
+        score = display_score()
         #Player
         player.draw(screen)
         player.update()
@@ -383,16 +403,32 @@ while True:
         
        
     else: 
-        
+        player.update()
         enemy_group.empty()
         enemy_group2.empty()
         enemy_group3.empty()
         enemy_group4.empty()
+        count = 0
        
         screen.fill("#3d6496")
         
+       
+
         screen.blit(game_name,name_rect)
         screen.blit(gameover_surf2, over_rect2)
+        
+       
+        if score >= h_score:
+            h_score = score
+        end_score = s_font.render(f'Your current score: {score}', False , "#083b02")
+        end_score_rect = end_score.get_rect(center = (350, 500))
+        
+        high_score_text = s_font.render(f'Highest score:{h_score}', False, "#4ae739")
+        high_score_text_rect = high_score_text.get_rect(center = (350, 600))
+
+        if score > 0:
+            screen.blit(end_score, end_score_rect)
+            screen.blit(high_score_text, high_score_text_rect)
        
     pygame.display.update()
     clock.tick(60)
