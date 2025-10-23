@@ -374,19 +374,18 @@ while True:
         if game_active:
             #ENEMY SPAWN TIMER
             if event.type == obstacle_timer:
-                
-            
                 enemy_group.add(Enemy_left())
+
             if event.type == obstacle_timer and count >= 500:
-                
                 enemy_group2.add(Enemy_right())
+
             if event.type == obstacle_timer and count >= 1000:
-                
                 enemy_group3.add(Enemy_up()) 
+
             if event.type == obstacle_timer and count >= 2000:
-                
-                enemy_group3.add(Enemy_right())
-               
+                enemy_group4.add(Enemy_down())
+            
+            
            
    
     if game_active:
